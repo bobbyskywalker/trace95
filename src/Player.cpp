@@ -37,22 +37,31 @@ void Player::moveBackward(float speed, const GameMap& map) {
 
 void Player::strafeLeft(float speed, const GameMap& map) {
 	auto m = map.getMap();
-	double strafeX = _playerPos.dirY;
-	double strafeY = -_playerPos.dirX;
-	int x = static_cast<int>(_playerPos.posX + strafeX * speed);
-	int y = static_cast<int>(_playerPos.posY + strafeY * speed);
-	if (m[y][x] == '0') _playerPos.posX += strafeX * speed;
-	if (m[y][x] == '0') _playerPos.posY += strafeY * speed;
+	double strafeX = -_playerPos.dirY;
+	double strafeY = _playerPos.dirX;
+
+	double nextX = _playerPos.posX + strafeX * speed;
+	double nextY = _playerPos.posY + strafeY * speed;
+
+	if (m[static_cast<int>(_playerPos.posY)][static_cast<int>(nextX)] == '0')
+		_playerPos.posX = nextX;
+	if (m[static_cast<int>(nextY)][static_cast<int>(_playerPos.posX)] == '0')
+		_playerPos.posY = nextY;
 }
+
 
 void Player::strafeRight(float speed, const GameMap& map) {
 	auto m = map.getMap();
-	double strafeX = -_playerPos.dirY;
-	double strafeY = _playerPos.dirX;
-	int x = static_cast<int>(_playerPos.posX + strafeX * speed);
-	int y = static_cast<int>(_playerPos.posY + strafeY * speed);
-	if (m[y][x] == '0') _playerPos.posX += strafeX * speed;
-	if (m[y][x] == '0') _playerPos.posY += strafeY * speed;
+	double strafeX = _playerPos.dirY;
+	double strafeY = -_playerPos.dirX;
+
+	double nextX = _playerPos.posX + strafeX * speed;
+	double nextY = _playerPos.posY + strafeY * speed;
+
+	if (m[static_cast<int>(_playerPos.posY)][static_cast<int>(nextX)] == '0')
+		_playerPos.posX = nextX;
+	if (m[static_cast<int>(nextY)][static_cast<int>(_playerPos.posX)] == '0')
+		_playerPos.posY = nextY;
 }
 
 void Player::rotate(double angle) {

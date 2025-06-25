@@ -8,15 +8,26 @@ const std::vector<std::string>& GameMap::getMap(void) const {
 	return (_2dMap);
 }
 
-const std::string& GameMap::getTexture(char id) const {
+const std::string& GameMap::getTexturePath(char id) const {
 	switch (id) {
-		case 'N': return (_NTexture);
-		case 'S': return (_STexture);
-		case 'W': return (_WTexture);
-		case 'E': return (_ETexture);
+		case 'N': return (_NTexturePath);
+		case 'S': return (_STexturePath);
+		case 'W': return (_WTexturePath);
+		case 'E': return (_ETexturePath);
 		default:
 			static const std::string empty = "";
 		return (empty);
+	}
+}
+
+const sf::Texture& GameMap::getTexture(char side) const {
+	switch (side) {
+		case 'N': return (_textureNorth);
+		case 'S': return (_textureSouth);
+		case 'W': return (_textureWest);
+		case 'E': return (_textureEast);
+		default:
+			throw std::runtime_error("Invalid wall side: " + std::string(1, side));
 	}
 }
 

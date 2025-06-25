@@ -65,6 +65,32 @@ void GameMap::_validateTextureFile(const std::string& path, const std::string& l
 	}
 }
 
+void GameMap::_loadTextures(void) {
+	if (_NTexturePath.empty())
+		throw std::runtime_error("Missing north texture path (NO)");
+	if (_STexturePath.empty())
+		throw std::runtime_error("Missing south texture path (SO)");
+	if (_WTexturePath.empty())
+		throw std::runtime_error("Missing west texture path (WE)");
+	if (_ETexturePath.empty())
+		throw std::runtime_error("Missing east texture path (EA)");
+
+	_validateTextureFile(_NTexturePath, "NO");
+	_validateTextureFile(_STexturePath, "SO");
+	_validateTextureFile(_WTexturePath, "WE");
+	_validateTextureFile(_ETexturePath, "EA");
+
+	if (!_textureNorth.loadFromFile(_NTexturePath))
+		throw std::runtime_error("Failed to load texture: NO (" + _NTexturePath + ")");
+	if (!_textureSouth.loadFromFile(_STexturePath))
+		throw std::runtime_error("Failed to load texture: SO (" + _STexturePath + ")");
+	if (!_textureWest.loadFromFile(_WTexturePath))
+		throw std::runtime_error("Failed to load texture: WE (" + _WTexturePath + ")");
+	if (!_textureEast.loadFromFile(_ETexturePath))
+		throw std::runtime_error("Failed to load texture: EA (" + _ETexturePath + ")");
+
+}
+
 t_pos GameMap::_findPlayerTile(void) {
 	t_pos res = {0, 0, 0, 0, 0, 0};
 
@@ -129,10 +155,10 @@ void GameMap::_loadMapFile(void) {
 			std::getline(iss, rest);
 			trim(rest);
 
-			if (identifier == "NO") _NTexture = rest;
-			else if (identifier == "SO") _STexture = rest;
-			else if (identifier == "WE") _WTexture = rest;
-			else if (identifier == "EA") _ETexture = rest;
+			if (identifier == "NO") _NTexturePath = rest;
+			else if (identifier == "SO") _STexturePath = rest;
+			else if (identifier == "WE") _WTexturePath = rest;
+			else if (identifier == "EA") _ETexturePath = rest;
 			else if (identifier == "F") _floorColor = _parseColor(rest);
 			else if (identifier == "C") _ceilColor = _parseColor(rest);
 			else if (std::isdigit(line[0]) || line[0] == ' ') {
@@ -148,19 +174,8 @@ void GameMap::_loadMapFile(void) {
 		throw std::runtime_error("Parsed map is not closed.");
 	if (_2dMap.empty())
 		throw std::runtime_error("No map grid found in file.");
-	if (_NTexture.empty())
-		throw std::runtime_error("Missing north texture path (NO)");
-	if (_STexture.empty())
-		throw std::runtime_error("Missing south texture path (SO)");
-	if (_WTexture.empty())
-		throw std::runtime_error("Missing west texture path (WE)");
-	if (_ETexture.empty())
-		throw std::runtime_error("Missing east texture path (EA)");
 
-	_validateTextureFile(_NTexture, "NO");
-	_validateTextureFile(_STexture, "SO");
-	_validateTextureFile(_WTexture, "WE");
-	_validateTextureFile(_ETexture, "EA");
+	_loadTextures();
 
 	if (_floorColor == sf::Color(0, 0, 0) && _ceilColor == sf::Color(0, 0, 0)) {
 		throw std::runtime_error("Missing floor and ceiling colors");
