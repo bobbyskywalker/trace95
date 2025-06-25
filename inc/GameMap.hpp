@@ -11,12 +11,15 @@
 # include <cctype>
 # include <algorithm>
 # include <SFML/Graphics.hpp>
+# include "Utils.hpp"
 
 class GameMap {
 
 private:
 	std::vector<std::string> 				_2dMap;
 	std::string								_mapFilepath;
+
+	t_pos									_playerStartPos;
 
 	std::string 							_NTexture;
 	std::string 							_STexture;
@@ -29,6 +32,7 @@ private:
 	bool									_isMapClosed(void) const;
 	void									_validateTextureFile(const std::string& path, const std::string& label) const;
 	sf::Color 								_parseColor(const std::string& value);
+	t_pos 									_findPlayerTile(void) const;
 	void									_loadMapFile(void);
 
 public:
@@ -39,6 +43,7 @@ public:
     const std::string& 						getTexture(char id) const;
     const sf::Color 						getFloorColor(void) const;
 	const sf::Color 						getCeilColor(void) const;
+	const t_pos&							getPlayerStartPos(void) const;
 } ;
 
 #endif

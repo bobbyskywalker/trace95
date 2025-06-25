@@ -27,3 +27,7 @@ const sf::Color GameMap::getFloorColor(void) const {
 const sf::Color GameMap::getCeilColor(void) const {
 	return (_ceilColor);
 }
+
+const t_pos& GameMap::getPlayerStartPos(void) const {
+	return (_playerStartPos);
+}

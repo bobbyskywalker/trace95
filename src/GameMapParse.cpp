@@ -24,16 +24,16 @@ sf::Color GameMap::_parseColor(const std::string& value) {
 }
 
 bool GameMap::_isMapClosed() const {
-	int height = _2dMap.size();
+	std::size_t height = _2dMap.size();
 	if (height == 0)
 		return (false);
 
-	int width = 0;
+	std::size_t width = 0;
 	for (const std::string& row : _2dMap)
-		width = std::max(width, (int)row.length());
+		width = std::max(width, row.length());
 
-	auto checkRow = [](const std::string& row, int width) {
-		for (int x = 0; x < width; ++x) {
+	auto checkRow = [](const std::string& row, std::size_t width) {
+		for (std::size_t x = 0; x < width; ++x) {
 			char tile = (x < row.length()) ? row[x] : ' ';
 			if (tile != '1' && tile != ' ')
 				return (false);
@@ -64,6 +64,42 @@ void GameMap::_validateTextureFile(const std::string& path, const std::string& l
 		throw std::runtime_error("Texture file not found or unreadable: " + label + " → " + path);
 	}
 }
+
+t_pos GameMap::_findPlayerTile(void) const {
+	t_pos res = {0, 0, 0, 0};
+
+	for (std::size_t y = 0; y < _2dMap.size(); ++y) {
+		const std::string& row = _2dMap[y];
+		for (std::size_t x = 0; x < row.length(); ++x) {
+			char tile = row[x];
+			switch (tile) {
+				case 'N':
+					res.dirX = 0;
+				res.dirY = -1;
+				break;
+				case 'S':
+					res.dirX = 0;
+				res.dirY = 1;
+				break;
+				case 'E':
+					res.dirX = 1;
+				res.dirY = 0;
+				break;
+				case 'W':
+					res.dirX = -1;
+				res.dirY = 0;
+				break;
+				default:
+					continue;
+			}
+			res.posX = x + 0.5;
+			res.posY = y + 0.5;
+			return (res);
+		}
+	}
+	throw std::runtime_error("No player start position found in map.");
+}
+
 
 void GameMap::_loadMapFile(void) {
 	std::ifstream map_file(_mapFilepath);
@@ -131,4 +167,6 @@ void GameMap::_loadMapFile(void) {
 	else if (_ceilColor == sf::Color(0, 0, 0)) {
 		throw std::runtime_error("Missing ceiling color (C)");
 	}
+
+	_playerStartPos = _findPlayerTile();
 }
