@@ -65,11 +65,11 @@ void GameMap::_validateTextureFile(const std::string& path, const std::string& l
 	}
 }
 
-t_pos GameMap::_findPlayerTile(void) const {
-	t_pos res = {0, 0, 0, 0};
+t_pos GameMap::_findPlayerTile(void) {
+	t_pos res = {0, 0, 0, 0, 0, 0};
 
 	for (std::size_t y = 0; y < _2dMap.size(); ++y) {
-		const std::string& row = _2dMap[y];
+		std::string& row = _2dMap[y];
 		for (std::size_t x = 0; x < row.length(); ++x) {
 			char tile = row[x];
 			switch (tile) {
@@ -88,12 +88,16 @@ t_pos GameMap::_findPlayerTile(void) const {
 				case 'W':
 					res.dirX = -1;
 				res.dirY = 0;
+				row[x] = 0;
 				break;
 				default:
 					continue;
 			}
 			res.posX = x + 0.5;
 			res.posY = y + 0.5;
+			res.planeX = 0;
+			res.planeY = 0.66;
+			row[x] = '0';
 			return (res);
 		}
 	}

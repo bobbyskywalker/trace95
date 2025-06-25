@@ -6,6 +6,8 @@ typedef struct s_pos {
 	double posY;
 	double dirX;
 	double dirY;
+	double planeX;
+	double planeY;
 } t_pos;
 
 #endif
