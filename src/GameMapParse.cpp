@@ -23,6 +23,48 @@ sf::Color GameMap::_parseColor(const std::string& value) {
 	return (sf::Color(r, g, b));
 }
 
+bool GameMap::_isMapClosed() const {
+	int height = _2dMap.size();
+	if (height == 0)
+		return (false);
+
+	int width = 0;
+	for (const std::string& row : _2dMap)
+		width = std::max(width, (int)row.length());
+
+	auto checkRow = [](const std::string& row, int width) {
+		for (int x = 0; x < width; ++x) {
+			char tile = (x < row.length()) ? row[x] : ' ';
+			if (tile != '1' && tile != ' ')
+				return (false);
+		}
+		return (true);
+	};
+
+	if (!checkRow(_2dMap.front(), width) || !checkRow(_2dMap.back(), width))
+		return (false);
+
+	for (const std::string& row : _2dMap) {
+		int left = 0;
+		while (left < (int)row.length() && std::isspace(row[left])) left++;
+		if (left >= (int)row.length() || row[left] != '1')
+			return (false);
+
+		int right = row.length() - 1;
+		while (right >= 0 && std::isspace(row[right])) right--;
+		if (right < 0 || row[right] != '1')
+			return (false);
+	}
+	return (true);
+}
+
+void GameMap::_validateTextureFile(const std::string& path, const std::string& label) const {
+	std::ifstream file(path);
+	if (!file.good()) {
+		throw std::runtime_error("Texture file not found or unreadable: " + label + " → " + path);
+	}
+}
+
 void GameMap::_loadMapFile(void) {
 	std::ifstream map_file(_mapFilepath);
 	std::string line;
@@ -35,15 +77,24 @@ void GameMap::_loadMapFile(void) {
 	while (std::getline(map_file, line)) {
 		trim(line);
 
-		if (line.empty()) continue;
+		if (line.empty())
+			continue;
 
 		if (!parsing_map) {
-			if (line.rfind("NO ", 0) == 0) _NTexture = line.substr(3);
-			else if (line.rfind("SO ", 0) == 0) _STexture = line.substr(3);
-			else if (line.rfind("WE ", 0) == 0) _WTexture = line.substr(3);
-			else if (line.rfind("EA ", 0) == 0) _ETexture = line.substr(3);
-			else if (line.rfind("F ", 0) == 0) _floorColor = _parseColor(line.substr(2));
-			else if (line.rfind("C ", 0) == 0) _ceilColor = _parseColor(line.substr(2));
+			std::istringstream iss(line);
+			std::string identifier;
+			iss >> identifier;
+
+			std::string rest;
+			std::getline(iss, rest);
+			trim(rest);
+
+			if (identifier == "NO") _NTexture = rest;
+			else if (identifier == "SO") _STexture = rest;
+			else if (identifier == "WE") _WTexture = rest;
+			else if (identifier == "EA") _ETexture = rest;
+			else if (identifier == "F") _floorColor = _parseColor(rest);
+			else if (identifier == "C") _ceilColor = _parseColor(rest);
 			else if (std::isdigit(line[0]) || line[0] == ' ') {
 				parsing_map = true;
 				_2dMap.push_back(line);
@@ -53,6 +104,8 @@ void GameMap::_loadMapFile(void) {
 		}
 	}
 
+	if (!_isMapClosed())
+		throw std::runtime_error("Parsed map is not closed.");
 	if (_2dMap.empty())
 		throw std::runtime_error("No map grid found in file.");
 	if (_NTexture.empty())
@@ -63,4 +116,19 @@ void GameMap::_loadMapFile(void) {
 		throw std::runtime_error("Missing west texture path (WE)");
 	if (_ETexture.empty())
 		throw std::runtime_error("Missing east texture path (EA)");
+
+	_validateTextureFile(_NTexture, "NO");
+	_validateTextureFile(_STexture, "SO");
+	_validateTextureFile(_WTexture, "WE");
+	_validateTextureFile(_ETexture, "EA");
+
+	if (_floorColor == sf::Color(0, 0, 0) && _ceilColor == sf::Color(0, 0, 0)) {
+		throw std::runtime_error("Missing floor and ceiling colors");
+	}
+	else if (_floorColor == sf::Color(0, 0, 0)) {
+		throw std::runtime_error("Missing floor color (F)");
+	}
+	else if (_ceilColor == sf::Color(0, 0, 0)) {
+		throw std::runtime_error("Missing ceiling color (C)");
+	}
 }

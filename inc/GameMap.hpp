@@ -26,6 +26,8 @@ private:
    	sf::Color 								_floorColor;
 	sf::Color 								_ceilColor;
 
+	bool									_isMapClosed(void) const;
+	void									_validateTextureFile(const std::string& path, const std::string& label) const;
 	sf::Color 								_parseColor(const std::string& value);
 	void									_loadMapFile(void);
 
