@@ -1,7 +1,7 @@
-NO ../../textures/wolftex/bluestone.png
-SO ../../textures/wolftex/greystone.png
-WE ../../textures/wolftex/eagle.png
-EA ../../textures/wolftex/mossy.png
+NO ../../textures/scifitextures/wall_desert_0.png
+SO ../../textures/scifitextures/wall_desert_1.png
+WE ../../textures/scifitextures/wall_desert_2.png
+EA ../../textures/scifitextures/wall_ship_0.png
 
 F 120,80,40
 C 150,200,255

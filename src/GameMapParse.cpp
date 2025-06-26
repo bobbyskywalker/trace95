@@ -101,34 +101,40 @@ t_pos GameMap::_findPlayerTile(void) {
 			switch (tile) {
 				case 'N':
 					res.dirX = 0;
-				res.dirY = -1;
-				break;
+					res.dirY = -1;
+					res.planeX = 0.66;
+					res.planeY = 0;
+					break;
 				case 'S':
 					res.dirX = 0;
-				res.dirY = 1;
-				break;
+					res.dirY = 1;
+					res.planeX = -0.66;
+					res.planeY = 0;
+					break;
 				case 'E':
 					res.dirX = 1;
-				res.dirY = 0;
-				break;
+					res.dirY = 0;
+					res.planeX = 0;
+					res.planeY = 0.66;
+					break;
 				case 'W':
 					res.dirX = -1;
-				res.dirY = 0;
-				row[x] = 0;
-				break;
+					res.dirY = 0;
+					res.planeX = 0;
+					res.planeY = -0.66;
+					break;
 				default:
 					continue;
 			}
 			res.posX = x + 0.5;
 			res.posY = y + 0.5;
-			res.planeX = 0;
-			res.planeY = 0.66;
 			row[x] = '0';
-			return (res);
+			return res;
 		}
 	}
 	throw std::runtime_error("No player start position found in map.");
 }
+
 
 
 void GameMap::_loadMapFile(void) {

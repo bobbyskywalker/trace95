@@ -37,8 +37,8 @@ void Player::moveBackward(float speed, const GameMap& map) {
 
 void Player::strafeLeft(float speed, const GameMap& map) {
 	auto m = map.getMap();
-	double strafeX = -_playerPos.dirY;
-	double strafeY = _playerPos.dirX;
+	double strafeX = _playerPos.dirY;
+	double strafeY = -_playerPos.dirX;
 
 	double nextX = _playerPos.posX + strafeX * speed;
 	double nextY = _playerPos.posY + strafeY * speed;
@@ -52,8 +52,8 @@ void Player::strafeLeft(float speed, const GameMap& map) {
 
 void Player::strafeRight(float speed, const GameMap& map) {
 	auto m = map.getMap();
-	double strafeX = _playerPos.dirY;
-	double strafeY = -_playerPos.dirX;
+	double strafeX = -_playerPos.dirY;
+	double strafeY = _playerPos.dirX;
 
 	double nextX = _playerPos.posX + strafeX * speed;
 	double nextY = _playerPos.posY + strafeY * speed;
