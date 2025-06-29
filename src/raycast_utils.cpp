@@ -89,3 +89,29 @@ void apply_wall_textures(t_rc_params& rc_params, const GameMap& gameMap, t_pos& 
 	slice.setPosition({float(x), float(rc_params.drawStart)});
 	window.draw(slice);
 }
+
+void apply_floor_ceil_colors(const GameMap& gameMap, sf::RenderWindow& window) {
+	sf::RectangleShape rectangle(sf::Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT / 2.0f));
+	rectangle.setFillColor(gameMap.getCeilColor());
+	window.draw(rectangle);
+	rectangle.setPosition({0.0f, SCREEN_HEIGHT / 2.0f});
+	rectangle.setFillColor(gameMap.getFloorColor());
+	window.draw(rectangle);
+}
+
+void draw_crosshair(sf::RenderWindow& window) {
+	sf::Vector2u windowSize = window.getSize();
+	float centerX = windowSize.x / 2.0f;
+	float centerY = windowSize.y / 2.0f;
+
+	sf::RectangleShape crosshairHoriz(sf::Vector2f(20.0f, 5.0f));
+	crosshairHoriz.setFillColor(sf::Color::White);
+	crosshairHoriz.setPosition({centerX - 10.0f, centerY - 2.5f});
+
+	sf::RectangleShape crosshairVert(sf::Vector2f(5.0f, 15.0f));
+	crosshairVert.setFillColor(sf::Color::White);
+	crosshairVert.setPosition({centerX - 2.5f, centerY - 7.5f});
+
+	window.draw(crosshairHoriz);
+	window.draw(crosshairVert);
+}

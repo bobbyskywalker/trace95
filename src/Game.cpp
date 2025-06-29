@@ -21,22 +21,24 @@ void game_loop(std::string& map_path) {
 				window.close();
 			}
 
-			moveSpeed = 5.0f * deltaTime;
-			rotSpeed = 5.0f * deltaTime;
+		deltaTime = clock.restart().asSeconds();
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-				player.moveForward(moveSpeed, map);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-				player.moveBackward(moveSpeed, map);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-				player.strafeLeft(moveSpeed, map);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-				player.strafeRight(moveSpeed, map);
+		moveSpeed = 5.0f * deltaTime;
+		rotSpeed = 5.0f * deltaTime;
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
-				player.rotate(-rotSpeed);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
-				player.rotate(rotSpeed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+			player.moveForward(moveSpeed, map);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+			player.moveBackward(moveSpeed, map);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+			player.strafeLeft(moveSpeed, map);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+			player.strafeRight(moveSpeed, map);
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+			player.rotate(-rotSpeed);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+			player.rotate(rotSpeed);
 		}
 		window.clear();
 		deltaTime = clock.restart().asSeconds();

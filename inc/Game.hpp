@@ -39,6 +39,8 @@ void 				perform_dda(t_rc_params& rc_params, const std::vector<std::string> & ma
 void 				calc_wall_projection(t_rc_params& rc_params);
 void 				apply_wall_textures(t_rc_params& rc_params, const GameMap& gameMap, t_pos& p,
 								unsigned int x, sf::RenderWindow& window);
+void 				apply_floor_ceil_colors(const GameMap& gameMap, sf::RenderWindow& window);
+void 				draw_crosshair(sf::RenderWindow& window);
 
 /* SECTION: raycast core */
 void 				raycast(Player& player, const GameMap& gameMap,
