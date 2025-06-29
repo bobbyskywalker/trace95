@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 sf::RenderWindow window_setup(void) {
-	sf::RenderWindow window = sf::RenderWindow(sf::VideoMode({SCREEN_WIDTH, SCREEN_HEIGHT}), "trace95");
+	sf::RenderWindow window = sf::RenderWindow(sf::VideoMode( {SCREEN_WIDTH, SCREEN_HEIGHT} ), "trace95");
 	window.setFramerateLimit(144);
 	return (window);
 }

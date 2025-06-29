@@ -6,25 +6,23 @@
 void game_loop(std::string& map_path) {
 	auto window = window_setup();
 
-	GameMap map = GameMap(map_path);
-	Player player = Player(map);
+	GameMap map(map_path);
+	Player player(map);
 
 	sf::Clock clock;
 	float deltaTime;
-
-	float moveSpeed;
-	float rotSpeed;
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
 				window.close();
 			}
+		}
 
 		deltaTime = clock.restart().asSeconds();
 
-		moveSpeed = 5.0f * deltaTime;
-		rotSpeed = 5.0f * deltaTime;
+		float moveSpeed = 3.0f * deltaTime;
+		float rotSpeed = 3.0f * deltaTime;
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 			player.moveForward(moveSpeed, map);
@@ -39,12 +37,13 @@ void game_loop(std::string& map_path) {
 			player.rotate(-rotSpeed);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
 			player.rotate(rotSpeed);
-		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
+			window.close();
+
 		window.clear();
-		deltaTime = clock.restart().asSeconds();
-
 		raycast(player, map, window);
-
+		draw_crosshair(window);
 		window.display();
 	}
 }
