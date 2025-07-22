@@ -135,8 +135,6 @@ t_pos GameMap::_findPlayerTile(void) {
 	throw std::runtime_error("No player start position found in map.");
 }
 
-
-
 void GameMap::_loadMapFile(void) {
 	std::ifstream map_file(_mapFilepath);
 	std::string line;

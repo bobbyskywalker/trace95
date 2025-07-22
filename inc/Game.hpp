@@ -41,6 +41,7 @@ void 				apply_wall_textures(t_rc_params& rc_params, const GameMap& gameMap, t_p
 								unsigned int x, sf::RenderWindow& window);
 void 				apply_floor_ceil_colors(const GameMap& gameMap, sf::RenderWindow& window);
 void 				draw_crosshair(sf::RenderWindow& window);
+void				draw_minimap(const GameMap &gameMap, sf::RenderWindow &window, Player &player);
 
 /* SECTION: raycast core */
 void 				raycast(Player& player, const GameMap& gameMap,
